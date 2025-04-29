@@ -15,7 +15,7 @@ body{
 
 }
 .btn{
-  position:absolute;
+  position: fixed;
   right:0;
   bottom:20px;
   padding:0.3rem;

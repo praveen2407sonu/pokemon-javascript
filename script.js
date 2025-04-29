@@ -4,7 +4,7 @@ let button=document.querySelector(".btn")
 let select=document.querySelector("select")
 let input=document.querySelector("input")
 
-
+let filter=document.querySelector("#filter")
 
   let offsetvalue=20
 let limitvalue=0
@@ -73,7 +73,7 @@ function getfecthing(obj){
     <div class="flip-card-front">
       <img src="${element.sprites.other.dream_world.front_default}" alt="Avatar" >
       <p class="name">Name:   ${element.name}</p>
-    <p class="type">type:  ${element.types[0].type.name}  </p>
+   <p class="type">type: ${element.types[0].type.name}${element.types[1] ? ', ' + element.types[1].type.name : ''}</p>
     </div>
     <div class="flip-card-back">
       <p>height: ${element.height}</p>
@@ -115,17 +115,50 @@ input.addEventListener("input",(e)=>{
  select.addEventListener("change",(e)=>{
        selectarr=[]
        let searching=e.target.value
- pokimondata.forEach((element,index)=>{
-          element.types.forEach((obj)=>{
-              if(obj.type.name===searching){
-                  // console.log("milgya")
-                  selectarr.push(element)
-                 
 
-                  
-              }
-          })
-          console.log(selectarr)
-       })
-       getfecthing(selectarr)
+      
+        if (searching === filter.value) {
+        
+         getfecthing(pokimondata);
+        
+        console.log(pokimondata);
+        
+        
+        
+        
+    }
+    else {
+        pokimondata.forEach((element, index) => {
+            element.types.forEach((obj) => {
+                if (obj.type.name === searching) {
+                   
+                    selectarr.push(element);
+                }
+            })
+            console.log(selectarr)
+        })
+        getfecthing(selectarr)
+    };
+
+   
+        
+
+       
  })
+
+
+
+//  filter.addEventListener("click", () => {
+//   let selectedType = select.value;
+
+//   if (selectedType === "all") {
+//       // Show all Pokémon
+//       getfecthing(pokimondata);
+//   } else {
+//       // Filter by selected type
+//       let filtered = pokimondata.filter(pokemon =>
+//           pokemon.types.some(typeObj => typeObj.type.name === selectedType)
+//       );
+//       getfecthing(filtered);
+//   }
+// });
