@@ -1,99 +1,131 @@
-const results = document.querySelector("#result");
-const searchInput = document.querySelector("#search"); 
- 
-const API = "https://pokeapi.co/api/v2/pokemon?offset=20&limit=20";
+let results=document.querySelector("#result")
+let button=document.querySelector(".btn")
 
-async function fetchData() {
-    const response = await fetch(API);
-    // console.log(response);
-    
-    const result = await response.json();
-    // console.log(result);
-    
-    getData(result.results);
-    //console.log(result.results);
-    
+let select=document.querySelector("select")
+let input=document.querySelector("input")
 
-}
-fetchData();
 
-async function getData(arr){
-    for(let item of arr){
-        const res = await fetch(item.url);
-        // console.log(res);
-        const reslt = await res.json();
 
-         const imgDiv = document.createElement("img");
-        //  imgDiv.src = reslt.sprites.other.dream_world.front_default;
-        getfetch(reslt);
-        console.log(reslt);
-    }
+  let offsetvalue=20
+let limitvalue=0
 
+let pokimondata=[]
+let selectarr=[]
+
+button.addEventListener("click",()=>{
+  fetchpokimon()
+})
+
+async function fetchpokimon(){
+    let response= await fetch(`https://pokeapi.co/api/v2/pokemon?limit=${limitvalue}&offset=${offsetvalue}`)
+    // console.log(response)
+    let result=await response.json()
+    // console.log(result.results)
+    getdata(result.results)
+    offsetvalue=offsetvalue+20
 }
 
-async function getfetch(arr) {
-     
-    // const imgDiv = document.createElement("img");
-    // imgDiv.src = reslt.sprites.other.dream_world.front_default;
-    // imgDiv.src = reslt.sprites.other.dream_world.front_default;
+type()
+async function type(){
+      let types=await fetch(" https://pokeapi.co/api/v2/type/?limit=21")
+      let typesresponse=await types.json()
+      // console.log(typesresponse.results)
+      pokimontypes(typesresponse.results)
+}
+function pokimontypes(arr){
+     arr.forEach((obj)=>{
+         let option=document.createElement("option")
+         option.value=obj.name
+         option.innerText=obj.name
+         select.append(option)
+     })
+}
 
-    let new_div=document.createElement("div");
-    new_div.innerHTML=`
-    <div class="flip-box">
-    <div class="flip-box-inner">
-    <div class="flip-box-front">
-    <img src="${arr.sprites.front_shiny}" alt="Avatar">
-    <p>Name:${arr.name}</p>
-    <p>Type:${arr.types[0].type.name}</p>
-      </div>
-      
-      <div class="flip-box-back">
-      
-      <p>height:${arr.height}</p>
-      <p>weight:${arr.weight}</p>
-      <p>hp:${arr.stats[0].base_stat}</p>
-      <p>attack:${arr.stats[1].base_stat}</p>
-      <p>defence:${arr.stats[2].base_stat}</p>
-      <p>special_attack:${arr.stats[3].base_stat}</p>
-      <p>special_defence:${arr.stats[4].base_stat}</p>
-      <p>speed:${arr.stats[5].base_stat}</p>
+fetchpokimon()
 
+
+async function getdata(arr){
+  //  console.log(arr)
+  for(let x of arr){
+    let fetcheing=await fetch(x.url)
+    let resutlfetch=await fetcheing.json()
+    pokimondata.push(resutlfetch)
+// pokimondata.push(resutlfetch)
+// console.log(pokimondata)
+
+}
+// console.log(pokimondata)
+getfecthing(pokimondata)
+}
+// console.log(pokimondata)
+
+
+
+function getfecthing(obj){
+      results.innerHTML=" "
+  obj.forEach((element)=>{
+    // console.log(element)
+    let divmain=document.createElement("div")
+    divmain.classList.add("flip-card")
+    divmain.innerHTML=`
    
+  <div class="flip-card-inner">
+    <div class="flip-card-front">
+      <img src="${element.sprites.other.dream_world.front_default}" alt="Avatar" >
+      <p class="name">Name:   ${element.name}</p>
+    <p class="type">type:  ${element.types[0].type.name}  </p>
     </div>
+    <div class="flip-card-back">
+      <p>height: ${element.height}</p>
+     <p>Weight: ${element.weight}</p>
+     <p>hp : ${element.stats[0].base_stat}</p>
+     <p>attack: ${element.stats[1].base_stat}</p>
+     <p>defence: ${element.stats[2].base_stat}</p>
+     <p>special_attack: ${element.stats[3].base_stat}</p>
+     <p>special_defence: ${element.stats[4].base_stat}</p>
+     <p>speed: ${element.stats[5].base_stat}</p>
     </div>
-    </div>`
-    results.append(new_div);
+  </div>
 
+
+`    
+
+results.append(divmain)
+  })
+    
+  
+  
+    
+    // console.log(arr.types[0].type.name);
+  
+   
+   
+   
+   
 }
+input.addEventListener("input",(e)=>{
+ let searchvariable=e.target.value
+ let value=pokimondata.filter((obj)=>{
+    return obj.name.includes(searchvariable)
+ })
+//  console.log(value)
+ getfecthing(value)
+})
 
+ select.addEventListener("change",(e)=>{
+       selectarr=[]
+       let searching=e.target.value
+ pokimondata.forEach((element,index)=>{
+          element.types.forEach((obj)=>{
+              if(obj.type.name===searching){
+                  // console.log("milgya")
+                  selectarr.push(element)
+                 
 
-// searchInput.addEventListener("input", (e) => {
-//     const value = e.target.value.toLowerCase();
-
-//     const filtered = getfetch.filter(pokemon =>
-//         pokemon.name.toLowerCase().includes(value) ||
-//         pokemon.types.some(typeInfo => typeInfo.type.name.toLowerCase().includes(value))
-//     );
-
-//     displayPokemon(filtered);
-// });
-
-
-// async function searchPokemon(pokemonName) {
-//     const url = `https://pokeapi.co/api/v2/pokemon/${pokemonName.toLowerCase()}`;
-
-//     try {
-//         const response = await fetch(url);
-
-//         if (response.status === 200) {
-//             const data = await response.json();
-//             console.log("Name:", data.name);
-//             console.log("ID:", data.id);
-//             // Access other properties from the data object
-//         } else {
-//             console.error("Error: Could not find Pokemon - Status Code:", response.status);
-//         }
-//     } catch (error) {
-//         console.error("Error:", error);
-//     }
-// }
+                  
+              }
+          })
+          console.log(selectarr)
+       })
+       getfecthing(selectarr)
+ })
