@@ -29,7 +29,7 @@ body{
 #wrapper h1{
   margin-bottom:1rem;
   font-size:40px;
-  box-shadow: 5px 5px 5px black;;
+  
 }
 #wrapper select{
    padding:0.3rem;
@@ -43,7 +43,7 @@ body{
     width: 270px;
     height: 300px;
   
-    border: 1px solid #f1f1f1;
+    border: 1px solid #efe3e3;
     margin:1rem 0;
     perspective: 1000px; /* Remove this if you don't want the 3D effect */
   }
@@ -74,7 +74,7 @@ body{
   
   /* Style the front side (fallback if image is missing) */
   .flip-card-front {
-    background-color: #bbb;
+    background-color:#bcb185;
     color: black;
   }
   
